@@ -1,0 +1,90 @@
+﻿@using Utilities.Extensions
+@model Example.Core.Model.Bookmark
+
+@{ ViewBag.Title = "Create Bookmark"; }
+
+<h2>
+    New Bookmark</h2>
+<fieldset>
+    <legend>New Bookmark</legend>
+    @using (Html.BeginForm())
+    {    
+        @Html.ValidationSummary(false)
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)  
+        @Html.FullFieldEditor(model => model.Title)
+        <a id="GetBookMark" href="">GetBookMark</a>
+        @Html.FullFieldEditor(model => model.Url)
+        @Html.FullFieldEditor(model => model.Description)
+        @Html.FullFieldEditor(model => model.DateStarted)
+        @Html.FullFieldEditor(model => model.DateClosed)
+        <div>@Html.LabelFor(model => model.BookmarkType)</div>
+        <div>@Html.DropDownListFor(model => model.BookmarkType.Id, (IEnumerable<SelectListItem>)ViewBag.Types)
+            @Html.ValidationMessageFor(model => model.BookmarkType.Id)</div>
+        <div>@Html.LabelFor(model => model.Tags)</div>        
+        <div>@Html.TextBox("TagsAsString", Model.Tags.ToCommaSeparatedString(), new { @autocomplete = "off" })@Html.ValidationMessageFor(model => model.Tags)</div>    
+        @Html.FullFieldEditor(model => model.IsFavourite)
+        <br/>
+        <input type="submit" value="Create" />        
+    }
+</fieldset>
+<br />
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@section Scripts
+{
+    @Html.DatePickerEnable()
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#GetBookMark").click(function (event) {
+                event.preventDefault();
+                var title = $("#Title").val();
+
+                $.getJSON(
+                    'GetBookmark',
+                    { Title: title },
+                    function (data) {
+                        $("#Url").val(data.Url);
+                    }
+                );
+            });
+        });
+
+        $(function () {
+
+            $("#TagsAsString")
+            // don't navigate away from the field on tab when selecting an item
+			.bind("keydown", function (event) {
+			    if (event.keyCode === $.ui.keyCode.TAB &&
+						$(this).data("autocomplete").menu.active) {
+			        event.preventDefault();
+			    }
+			})
+            .autocomplete({
+                source: "GetTags",
+                minLength: 3,
+                focus: function () {
+                    // prevent value inserted on focus
+                    return false;
+                },
+                select: function (event, ui) {
+                    var terms = new Array();
+
+                    if (this.value.contains(',')) {
+                        terms = this.value.split(',');
+                        //remove search term
+                        terms.pop();
+                    }
+                    // add the selected item
+                    terms.push(ui.item.value);
+                    // add placeholder to get the comma-and-space at the end
+                    terms.push("");
+                    this.value = terms.join(", ");
+                    return false;
+                }
+            });
+        });
+
+    </script>
+}

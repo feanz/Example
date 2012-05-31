@@ -1,0 +1,71 @@
+﻿@using Web.Helpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>   
+    @Html.Raw(SquishIt.Framework.Bundle.Css()
+                                .Add("~/Content/Site.css")
+                                .Add("~/Content/themes/base/minified/jquery-ui.min.css")
+                                .Render("~/Content/combined_#.css"))
+
+    <link rel="stylesheet" href="../../Content/qunit.css" />        
+    <script src="@Url.Content("~/Scripts/libs/modernizr-2.0.6-development-only.min.js")" type="text/javascript"></script>    
+    <meta name="viewport" content="width=device-width">
+    @RenderSection("Header", false)
+</head>
+<body>   
+    <header>        
+        <div class="content-wrapper">
+            <div class="float-left">     
+                <a href="@Url.Action("Index", "Home")">
+                    <div class="headerLogo float-left"></div>                
+                </a>        
+                <div class="site-title float-left" >
+                    @Html.GetEnvironment()
+                </div>                        
+            </div>            
+            <div class="float-right">
+                <section id="login">
+                    Hello, <span class="username">@User.Identity.Name</span>!
+                </section>
+                <nav>                        
+                        @Html.Menu(@User)                         
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div id="body">
+        <div id="flash" style="display: none;">
+        </div>
+        <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+        </section>
+    </div>
+    <footer>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p>&copy; @DateTime.Now.Year - G4S Application</p>
+            </div>                
+        </div>
+    </footer>
+    @*Java script should be loaded at the bottom of page to improve performance*@
+     @Html.Raw(SquishIt.Framework.Bundle.JavaScript()
+                                .Add("~/Scripts/libs/jquery-1.6.1.js")
+                                .Add("~/Scripts/libs/jquery-ui-1.8.16.js")
+                                .Add("~/Scripts/libs/jquery.validate.js")
+                                .Add("~/Scripts/libs/jquery.validate.unobtrusive.js")
+                                .Add("~/Scripts/customvalidations.js")
+                                .Add("~/Scripts/common.js")
+                                .Add("~/Scripts/Pages/pages.shared.js")
+                                .Render("~/Scripts/combined_#.js"))
+
+    <script src="../../Scripts/Tests/qunit.js" type="text/javascript" ></script>         
+    @*Mini profiler output *@        
+    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
+    @*Site wide notification system *@
+    @Html.Flash()                    
+    @*section to add page level scrip\Scripts\Pages\pages.shared.js"/>ts *@     
+    @RenderSection("Scripts", false)
+</body>
+</html>

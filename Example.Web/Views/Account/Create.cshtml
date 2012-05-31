@@ -1,0 +1,60 @@
+@model Example.Core.Model.User 
+@{
+    ViewBag.Title = "Create User";    
+}
+<h2>
+    Create User</h2>
+<fieldset>
+    <legend>Create User</legend>
+    @using (Html.BeginForm())
+    {       
+        @Html.ValidationSummary(true)
+        @Html.AntiForgeryToken()        
+        <p>
+            To create new user use the users full user login name e.g. "smithj" for "John Smith"</p>        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserName)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FirstName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FirstName)
+            @Html.ValidationMessageFor(model => model.FirstName)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastName)
+            @Html.ValidationMessageFor(model => model.LastName)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Email)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>         
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Roles)
+        </div>
+        <div class="editor-field">
+            @foreach (var role in (List<Example.Core.Model.Role>)ViewBag.PossibleRoles)
+            { 
+                <input type="checkbox" name="RoleIds" value="@role.Id" /> @role.RoleName 
+            }
+            @Html.ValidationMessageFor(model => model.Roles)
+        </div>
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    }
+</fieldset>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

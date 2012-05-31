@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "BookmarkTemplate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>
+    BookmarkTemplate</h2>
+<ul id="bookmarkContainer" style="list-style: none; margin-left: 0px;">
+</ul>
+<br />
+<a href="" id="Savebookmarks">Save Bookmarks</a>
+<br />
+<h2>
+    New Bookmark</h2>
+<h4>
+    Example page that uses jquery templating to provide rich client side functions.
+</h4>
+<fieldset>
+    <legend>New Bookmark</legend>
+    <div class="editor-label">
+        Title</div>
+    <div class="editor-field">@Html.TextBox("BookmarkTitle")</div>
+    <div class="editor-label">
+        Url</div>
+    <div class="editor-field">@Html.TextBox("Url")</div>
+    <div class="editor-label">
+        Tags</div>
+    <div class="editor-field">@Html.TextBox("Tags")</div>
+    <a href="" id="CreateBookmark">Create new Bookmark </a>
+</fieldset>
+@section Scripts
+{
+    <script src="../../Scripts/libs/jQuery.tmpl.min.js" type="text/javascript"></script>
+    <script id="bookmarkTemplate" type="text/x-jQuery-tmpl">
+        <li class="ui-state-default">              
+                <h2>${Title}</h2>
+                </br>
+                <a href='${Url}'>${Title}</a> 
+                </br>
+                 <ul class="Tags">
+                    {{each Tags}} <li><a href="Bookmark/Tags/${$value}"> ${$value} </a></li> {{/each}}
+                </ul >                       
+        </li>
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var bookmarks;
+            $.getJSON(
+                'GetAllBookmarks',
+                function (data) {
+                    // Render the bookmarks using the template
+                    bookmarks = data;
+                    $("#bookmarkTemplate").tmpl(bookmarks).appendTo("#bookmarkContainer");
+                }
+                );
+
+            if (bookmarks == null) {
+                var bookmark = { Id: "", Title: "Some Title", Url: "http://url", Tags: ["tag1", "tag2"] }
+            }
+            
+            $("#CreateBookmark").click(function (event) {
+                event.preventDefault();
+                var title = $("#BookmarkTitle").val();
+                var url = $("#Url").val();
+                var tags = $("#Tags").val();
+                var partsOfStr = tags.split(',');
+                var tagsToAdd = [];
+                for (var i = 0; i < partsOfStr.length; i++) {
+                    tagsToAdd.push(partsOfStr[i]);
+                }
+
+                var bookmark = { Id: "", Title: title, Url: url, Tags: tagsToAdd }
+                bookmarks.push(bookmark);
+                $("#bookmarkContainer").html('');
+                $("#bookmarkTemplate").tmpl(bookmarks).appendTo("#bookmarkContainer");
+            });
+
+            $("#Savebookmarks").click(function (event) {
+                event.preventDefault();
+
+                var request = $.ajax({
+                    url: "Savebookmark",
+                    type: "POST",
+                    data: JSON.stringify(bookmarks),
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8"
+                });
+
+                request.done(function (msg) {
+
+                });
+
+                request.fail(function (jqXHR, textStatus) {
+                    alert("Request failed: " + textStatus);
+                });
+            });
+
+
+            $("#bookmarkContainer").sortable();
+            $("#bookmarkContainer").disableSelection();
+        });
+
+    </script>
+}

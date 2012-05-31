@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Package">
+
+  <UsingTask AssemblyFile=".\tools\MsbuildAsyncExecTask\AsyncExec.dll" TaskName="AsyncExec.AsyncExec" />
+  <UsingTask AssemblyFile=".\tools\NCover\Build Task Plugins\NCover.MSBuildTasks.dll" TaskName="NCover.MSBuildTasks.NCover"/>
+  <UsingTask AssemblyFile=".\tools\NCover\Build Task Plugins\NCover.MSBuildTasks.dll" TaskName="NCover.MSBuildTasks.NCoverReporting" />
+  <UsingTask AssemblyFile=".\tools\MSBuildCommunityTasks\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.XmlRead" />
+  
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <BuildViews Condition=" '$(CompileViews)' == '' ">false</BuildViews>
+    <MigrationConnection Condition=" '$(MigrationConnection)' == '' "></MigrationConnection>
+    <UserName Condition=" '$(UserName)' == '' "></UserName>
+    <Password Condition=" '$(Password)' == '' "></Password>
+    <WebServerName Condition=" '$(WebServerName)' == '' "></WebServerName>
+  </PropertyGroup>
+
+  <ItemGroup Label="Solution">
+    <SolutionName Include="Example" />
+    <BuildArtifacts Include=".\buildartifacts\" />
+    <SolutionFile Include=".\Example.sln" />    
+  </ItemGroup>
+
+  <ItemGroup Label="Test">
+    <MSTest Include="&quot;$(VS100COMNTOOLS)..\IDE\mstest.exe&quot;"/>
+    <UnitTestAssembly Include="Example.UnitTest.dll" />
+    <AcceptanceTestAssembly Include="Example.AcceptanceTest.dll" />
+    <UnitTestResults Include="UnitTestResult.trx" />
+    <AcceptanceTestResults Include="AcceptanceTestResult.trx" />
+  </ItemGroup>
+
+  <ItemGroup Label="Code Analysis">
+    <FxCop Include=".\tools\FxCop\FxCopCmd.exe" />
+    <AssembliesToAnalyze Include=".\buildartifacts\Example.Web.dll" />
+    <ReferencedAssemblies Include=".\libs\Mvc\System.Web.Mvc.dll" />
+    <AnalysisReport Include=".\buildartifacts\FxCopAnalysis.xml" />
+  </ItemGroup>
+  
+  <ItemGroup Label="Migration">
+    <MegaMigratorDir Include=".\tools\MegaMigrator" />
+  </ItemGroup>
+
+  <ItemGroup Label="Deploy">
+    <MsDeploy Include=".\tools\Microsoft Web Deploy\msdeploy.exe"/>
+    <PackageFile Include=".\buildartifacts\package\Example.zip" />
+    <Cassini Include="$(CommonProgramFiles)\microsoft shared\DevServer\10.0\WebDev.WebServer40.exe"/>
+    <Website Include=".\buildartifacts\_PublishedWebsites\Example.Web"/>
+  </ItemGroup>
+  <PropertyGroup>
+    <WebServerName>Richard-PC</WebServerName>
+  </PropertyGroup>
+
+  <Target Name="Clean">
+    <RemoveDir Directories="@(BuildArtifacts)" />
+  </Target>
+
+  <Target Name="Init" DependsOnTargets="Clean">
+    <MakeDir Directories="@(BuildArtifacts)" />    
+  </Target>
+
+  <!-- Build solution using passed in configuration -->
+  <Target Name="Compile" DependsOnTargets="Init">
+    <MSBuild Projects="@(SolutionFile)" Targets="Rebuild" Properties="OutDir=%(BuildArtifacts.FullPath);Configuration=$(Configuration);MvcBuildViews=$(BuildViews);" />    
+  </Target>
+
+  <!-- Run application unit test -->
+  <Target Name="UnitTest" DependsOnTargets="Compile">
+    <PropertyGroup>
+      <!--TestSuccessOrNot is the property specify whether the Test is sucess or not -->
+      <TestSuccessOrNot>1</TestSuccessOrNot>
+    </PropertyGroup>
+    <!--Run MSTest.exe-->
+    <Exec Command="@(MSTest) /testcontainer:@(BuildArtifacts)\@(UnitTestAssembly) /resultsfile:@(BuildArtifacts)\@(UnitTestResults) /testsettings:.\local.testsettings ">      
+      <Output TaskParameter="ExitCode" PropertyName="TestSuccessOrNot"/>
+    </Exec>
+    <!--Produce a nice specflow report for unit tests-->
+    <Exec Command=".\packages\SpecFlow.1.8.1\tools\specflow.exe mstestexecutionreport  .\@(SolutionName).UnitTest\@(SolutionName).UnitTest.csproj /testresult:@(BuildArtifacts)\@(UnitTestResults) /out:@(BuildArtifacts)\UnitTestResults.html" />
+  </Target>
+
+  <!-- Run application unit test without rebuilding the solution  -->
+  <Target Name="JustTest">
+    <PropertyGroup>
+      <!--TestSuccessOrNot is the property specify whether the Test is sucess or not -->
+      <TestSuccessOrNot>1</TestSuccessOrNot>
+    </PropertyGroup>
+    <!--Run MSTest.exe-->
+    <Exec Command="@(MSTest) /testcontainer:@(BuildArtifacts)\@(UnitTestAssembly) /resultsfile:@(BuildArtifacts)\@(UnitTestResults) /testsettings:.\local.testsettings ">
+      <Output TaskParameter="ExitCode" PropertyName="TestSuccessOrNot"/>
+    </Exec>
+    <!--Produce a nice specflow report for unit tests-->
+    <Exec Command=".\packages\SpecFlow.1.8.1\tools\specflow.exe mstestexecutionreport  .\@(SolutionName).UnitTest\@(SolutionName).UnitTest.csproj /testresult:@(BuildArtifacts)\@(UnitTestResults) /out:@(BuildArtifacts)\UnitTestResults.html" />
+  </Target>
+
+  <!-- Run Specflow acceptance test and produce execution report -->
+  <Target Name="AcceptenceTest" DependsOnTargets="StartWebsite">
+    <Message Text="Generating SpecFlow Report..." />
+    <Exec Command="@(MSTest) /testcontainer:@(BuildArtifacts)\@(AcceptanceTestAssembly) /resultsfile:@(BuildArtifacts)\@(AcceptanceTestResults)" />
+    <Exec Command=".\packages\SpecFlow.1.8.1\tools\specflow.exe mstestexecutionreport  .\@(SolutionName).AcceptanceTest\@(SolutionName).AcceptanceTest.csproj /testresult:@(BuildArtifacts)\@(AcceptanceTestResults) /out:@(BuildArtifacts)\AcceptanceTestResults.html" />
+    <Exec Command="taskkill /f /im WEbDev.WEbServer40.exe" IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" />
+  </Target>
+
+  <Target Name="FxCop">
+    <Exec Command="@(FxCop)  /directory:@(ReferencedAssemblies) /project:.\tools\FxCop\project.FxCop /out:@(AnalysisReport) /gac /summary" />
+
+    <PropertyGroup>
+      <FxCopCriticalErros>0</FxCopCriticalErros>
+      <FxCopErrors>0</FxCopErrors>
+      <FxCopCriticalWarning>0</FxCopCriticalWarning>
+    </PropertyGroup>
+    <XmlRead ContinueOnError="True"
+             XmlFileName="@(AnalysisReport)"
+             XPath="string(count(//Issue[@Level='CriticalError']))">
+      <Output TaskParameter="Value" PropertyName="FxCopCriticalErrors" />
+    </XmlRead>
+    <XmlRead ContinueOnError="True"
+             XmlFileName="@(AnalysisReport)"
+             XPath="string(count(//Issue[@Level='Error']))">
+      <Output TaskParameter="Value" PropertyName="FxCopErrors" />
+    </XmlRead>
+    <XmlRead ContinueOnError="True"
+            XmlFileName="@(AnalysisReport)"
+            XPath="string(count(//Issue[@Level='CriticalWarning']))">
+      <Output TaskParameter="Value" PropertyName="FxCopCriticalWarnings" />
+    </XmlRead>
+    <!--<Error Text="FxCop encountered $(Count) material rule violations"
+           Condition="$(FxCopCriticalErros) &gt; 5 or $(FxCopErrors) &gt; 10 $(FxCopCriticalWarning) &gt; 0"-->
+  </Target>
+  
+  <!-- Migrate to latest version of database -->
+  <Target Name="Migrate" DependsOnTargets="Compile">
+    <Message Text="Starting FluentMigrator Migrate"/>
+    <Exec Command="@(MegaMigratorDir)\MegaMigrator -m .\Migrations -conn &quot;$(MigrationConnection)&quot;" />
+  </Target>
+
+  <!-- Package published application into a deployable zip format that can then be deployed to IIS  -->
+  <Target Name="Package" DependsOnTargets="Compile;JustTest;AcceptenceTest;FxCop">
+    <PropertyGroup>
+      <PackageDir>%(PackageFile.RootDir)%(PackageFile.Directory)</PackageDir>
+      <Source>%(Website.FullPAth)</Source>
+      <Destination>%(PackageFile.FullPath)</Destination>
+    </PropertyGroup>
+    <MakeDir Directories ="$(PackageDir)"/>
+    <Exec Command='"@(MsDeploy)" -verb:sync -source:iisApp="$(Source)" -dest:package="$(Destination)"' />
+  </Target>
+
+  <!-- Start a casini web server to host the published website -->
+  <Target Name="StartWebsite" DependsOnTargets="StopWebSite">
+    <AsyncExec Command='"@(Cassini)" /port:16387 /path:"%(Website.FullPath)" /vpath:' />
+  </Target>
+
+  <!-- Start a casini web server  -->
+  <Target Name="StopWebsite">
+    <Exec Command="taskkill /f /im WEbDev.WEbServer40.exe" IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" />
+  </Target>
+  
+  <!-- Deploy website using ms web deploy to remote iis webserver, this requires IIS 7+ and ms web deploy to be installed on remote machine   -->
+  <Target Name="Deploy" DependsOnTargets="Package;Migrate">
+    <PropertyGroup>
+      <Source>%(PackageFile.FullPath)</Source>
+    </PropertyGroup>
+    <Exec Command='"@(MsDeploy)" -verb:sync -source:package="$(Source)" -dest:iisApp=@(SolutionName),username=,password=' />
+    <!--<Exec Command='"@(MsDeploy)" -verb:sync -source:package="$(Source)" -dest:iisApp=@(SolutionName),computername=$(WebServerName),username=@(UserName),password=@(Password)' />-->
+  </Target>
+  
+</Project>
+
+
+

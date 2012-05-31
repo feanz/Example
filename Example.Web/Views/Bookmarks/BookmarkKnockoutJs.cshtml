@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Bookmark KnockoutJs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>
+    Bookmark Knockout Js</h2>
+<div id="bookmarkList" data-bind='template: "bookmarkListTemplate"'>
+</div>
+<p>
+    <button data-bind="click: addBookmark">Add a bookmark</button>
+    <button data-bind="click: save, enable: bookmarks().length > 0">Save to JSON</button>
+</p>
+ <textarea data-bind="value: lastSavedJson" rows="25" cols="60" > </textarea>
+<script type="text/html" id="bookmarkListTemplate">
+    <table class='bookmarkEditor'>
+        <tr>
+            <th>Title</th>
+            <th>Url</th>
+            <th>Tag</th>
+        </tr>
+        {{each(i, bookmark) bookmarks()}}                    
+            <tr>
+                <td valign="top" align="left">
+                    <input data-bind="value: title" />
+                    <div><a href="#" data-bind="click: function() { viewModel.removeBookmark(tags) }">Delete</a></div>
+                </td>
+                <td valign="top" align="left"><input data-bind="value: url" /></td>
+                <td>
+                    <table>
+                        {{each(i, tag) tags}}
+                            <tr>
+                                <td><input data-bind="value: tag" /></td>                                
+                                <td><a href="#" data-bind="click: function() { viewModel.removeTag(bookmark, tag) }">Delete</a></td>
+                            </tr>
+                        {{/each}}
+                    </table>
+                    <a href="#" data-bind="click: function() { viewModel.addTag(bookmark) }">Add tag</a>
+                </td>
+            </tr>
+        {{/each}}
+    </table>
+</script>
+@section Scripts
+{
+    <script src="../../Scripts/jQuery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/knockout-1.3.0beta.js" type="text/javascript"></script>
+    <script type="text/javascript">              
+        // The view model is an abstract description of the state of the UI, but without any knowledge of the UI technology (HTML)
+        var viewModel = {
+            bookmarks: new ko.observableArray([
+                { title: "BBC", url: "http://www.bbc.co.uk", tags: { tag: "News", tag: "Public Service", tag: "Broadcaster"} },
+                { title: "Google", url: "http://www.google.co.uk", tags: { tag: "Search Engine", tag: "Advert"} },
+                { title: "CNN", url: "http://www.cnn.co.uk", tags: { tag: "News", tag: "American"} }
+            ]),
+            addBookmark: function () {
+                viewModel.bookmarks.push({ title: "", url: "", tags: [] });
+            },
+            removeBookmark: function (bookmark) {
+                viewModel.bookmarks.remove(bookmark);
+            },
+            removeTag: function (bookmark, tag) {
+                ko.utils.arrayRemoveItem(bookmark.tags, tag);
+                viewModel.bookmarks.valueHasMutated();
+            },
+            addTag: function (bookmark) {
+                bookmark.tags.push({ tag: "" });
+                viewModel.bookmarks.valueHasMutated();
+            },
+            save: function () {
+                viewModel.lastSavedJson(JSON.stringify(viewModel.bookmarks(), null, 2));
+            },
+            lastSavedJson: new ko.observable("")
+        };
+
+        ko.applyBindings(viewModel);
+    </script>
+}

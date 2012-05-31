@@ -1,0 +1,37 @@
+﻿@using Telerik.Web.Mvc.UI
+@model IEnumerable<Example.Core.Model.Bookmark>
+
+@{
+    ViewBag.Title = "Telerik Grid";
+   Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*@using (Html.Configurator("The grid should...")
+              .PostTo("FirstLook", "Grid")
+              .Begin())*@
+
+<h2>Telerik Grid</h2>
+
+
+
+@(Html.Telerik().Grid(Model)
+        .Name("Grid")
+        .Columns(columns =>
+        {
+            columns.Bound(x => x.Id);
+            columns.Bound(x => x.Title);
+            columns.Bound(x => x.Description);
+            columns.Bound(x => x.Title);
+            columns.Bound(x => x.DateStarted).Format("{0:dd/MM/yyyy}");
+        })
+         .DataBinding(dataBinding =>
+         {
+             dataBinding.Server().Select("TelerikGrid", "Bookmarks", new { ajax = true });
+             dataBinding.Ajax().Select("_TelerikGrid", "Bookmarks").Enabled(true);
+         })
+        .Scrollable(scrolling => scrolling.Enabled(true))
+        .Sortable(sorting => sorting.Enabled(true))
+        .Pageable(paging => paging.Enabled(true))
+        .Filterable(filtering => filtering.Enabled(true))
+        .Groupable(grouping => grouping.Enabled(true))
+        .Footer(true))

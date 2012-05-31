@@ -1,0 +1,35 @@
+﻿@using Utilities.Extensions
+@model Example.Core.Model.Bookmark
+@{ ViewBag.Title = "Edit Bookmark"; }
+<h2>
+    Edit Bookmark</h2>
+<fieldset>
+    <legend>Edit Bookmark</legend>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)    
+        @Html.FullFieldEditor(model => model.Title)
+        <a id="GetBookMark" href="">GetBookMark</a>
+        @Html.FullFieldEditor(model => model.Url)
+        @Html.FullFieldEditor(model => model.Description)
+        @Html.FullFieldEditor(model => model.DateStarted)
+        @Html.FullFieldEditor(model => model.DateClosed)
+        <div>@Html.LabelFor(model => model.BookmarkType)</div>
+        <div>@Html.DropDownListFor(model => model.BookmarkType.Id, (IEnumerable<SelectListItem>)ViewBag.Types)
+            @Html.ValidationMessageFor(model => model.BookmarkType.Id)</div>        
+        <div>@Html.LabelFor(model => model.Tags)</div>                
+        <div>@Html.TextBox("TagsAsString", Model.Tags.ToCommaSeparatedString())@Html.ValidationMessageFor(model => model.Tags)</div>    
+        @Html.FullFieldEditor(model => model.IsFavourite)
+        <input type="submit" value="Save" /> 
+    }
+</fieldset>
+<br />
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@section Scripts
+{
+    @Html.DatePickerEnable()
+}

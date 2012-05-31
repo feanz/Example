@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Example.Core.Model.Bookmark>
+<ul class="Bookmarks">
+    @foreach (var item in Model)
+    {
+        <li>
+            <div class="Title">
+                <a href="@item.Url">@item.Title</a></div>
+            <div class="Url">
+                <a href="@item.Url">@item.Url</a></div>
+            <div class="Date Started">
+                Started on @item.DateStarted.ToShortDateString()</div>
+            <div class="Type">
+                Type @item.BookmarkType.TypeName</div>
+            <ul class="Tags">
+                @foreach (var tag in item.Tags)
+                { <li>@Html.ActionLink(tag, "Tag", new { controller = "Bookmarks", tag })</li>}
+            </ul>
+        </li>    
+        
+        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) @Html.ActionLink("Details", "Details", new { id = item.Id })
+        @Html.ActionLink("Delete", "Delete", new { id = item.Id })        
+    }
+</ul>

@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.36" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">c:\development\prototype\example\tools\fxcop\Xml\FxCopReport.xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="en-US" />
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>True</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>True</IgnoreGeneratedCode>
+ </ProjectOptions>
+ <Targets>
+  <Target Name="$(ProjectDir)/../../buildartifacts/Example.Web.dll" Analyze="True" AnalyzeAllChildren="False">
+   <Modules AnalyzeAllChildren="False">
+    <Module Name="example.web.dll" Analyze="True" AnalyzeAllChildren="False">
+     <Namespaces AnalyzeAllChildren="False">
+      <Namespace Name="" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="Example.Persistence.DataMapping" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="Infrastructure.Validation" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="Web" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="Web.App_Start" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="Web.Controllers" Analyze="True" AnalyzeAllChildren="False">
+       <Types AnalyzeAllChildren="False">
+        <Type Name="AccountController" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AccountController+&lt;&gt;c__DisplayClassd" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AccountController+&lt;Create&gt;o__SiteContainer2" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AccountController+&lt;Create&gt;o__SiteContainer4" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AccountController+&lt;PopulateAssignedRolesData&gt;o__SiteContainer7" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AccountController+ctor&gt;o__SiteContainer0" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="BookmarksController" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="BookmarksController+&lt;&gt;c__DisplayClassc" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="BookmarksController+&lt;&gt;c__DisplayClasse" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="BookmarksController+&lt;Create&gt;o__SiteContainer0" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="BookmarksController+&lt;Create&gt;o__SiteContainer2" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="BookmarksController+&lt;Edit&gt;o__SiteContainer4" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="BookmarksController+&lt;Edit&gt;o__SiteContainer6" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="ElmahResult" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="ErrorController" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="HomeController" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="HomeController+&lt;About&gt;o__SiteContainer2" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="HomeController+&lt;Contact&gt;o__SiteContainer4" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="HomeController+&lt;Index&gt;o__SiteContainer0" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="SessionController" Analyze="True" AnalyzeAllChildren="True" />
+       </Types>
+      </Namespace>
+      <Namespace Name="Web.Helpers" Analyze="True" AnalyzeAllChildren="False">
+       <Types AnalyzeAllChildren="False">
+        <Type Name="CompressFilterAttribute" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="CustomAuthorizeAttribute" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="CustomIdentity" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="CustomPrincipal" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="HandleErrorWithElmahAttribute" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="RouteAttribute+&lt;&gt;c__DisplayClassc" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="RoutePriority" Analyze="True" AnalyzeAllChildren="True" />
+       </Types>
+      </Namespace>
+      <Namespace Name="Web.Infrastructure.Logging" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="Web.Infrastructure.Validation" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="Web.Mappings" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="Web.Models" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="Web.Persistence" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="Web.Persistence.Repositories" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="Web.ViewModels" Analyze="True" AnalyzeAllChildren="True" />
+     </Namespaces>
+     <Resources AnalyzeAllChildren="True" />
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="False">
+    <Rule Name="AbstractTypesShouldNotHaveConstructors" Enabled="True" />
+    <Rule Name="AssembliesShouldHaveValidStrongNames" Enabled="True" />
+    <Rule Name="AvoidEmptyInterfaces" Enabled="True" />
+    <Rule Name="AvoidExcessiveParametersOnGenericTypes" Enabled="True" />
+    <Rule Name="CollectionsShouldImplementGenericInterface" Enabled="True" />
+    <Rule Name="ConsiderPassingBaseTypesAsParameters" Enabled="True" />
+    <Rule Name="DeclareEventHandlersCorrectly" Enabled="True" />
+    <Rule Name="DeclareTypesInNamespaces" Enabled="True" />
+    <Rule Name="DefineAccessorsForAttributeArguments" Enabled="True" />
+    <Rule Name="DoNotCatchGeneralExceptionTypes" Enabled="True" />
+    <Rule Name="DoNotDeclareProtectedMembersInSealedTypes" Enabled="True" />
+    <Rule Name="DoNotDeclareStaticMembersOnGenericTypes" Enabled="True" />
+    <Rule Name="DoNotDeclareVirtualMembersInSealedTypes" Enabled="True" />
+    <Rule Name="DoNotDeclareVisibleInstanceFields" Enabled="True" />
+    <Rule Name="DoNotHideBaseClassMethods" Enabled="True" />
+    <Rule Name="DoNotNestGenericTypesInMemberSignatures" Enabled="True" />
+    <Rule Name="DoNotOverloadOperatorEqualsOnReferenceTypes" Enabled="True" />
+    <Rule Name="DoNotPassTypesByReference" Enabled="True" />
+    <Rule Name="DoNotRaiseExceptionsInUnexpectedLocations" Enabled="True" />
+    <Rule Name="EnumeratorsShouldBeStronglyTyped" Enabled="True" />
+    <Rule Name="EnumsShouldHaveZeroValue" Enabled="True" />
+    <Rule Name="EnumStorageShouldBeInt32" Enabled="True" />
+    <Rule Name="ExceptionsShouldBePublic" Enabled="True" />
+    <Rule Name="GenericMethodsShouldProvideTypeParameter" Enabled="True" />
+    <Rule Name="ICollectionImplementationsHaveStronglyTypedMembers" Enabled="True" />
+    <Rule Name="ImplementIDisposableCorrectly" Enabled="True" />
+    <Rule Name="ImplementStandardExceptionConstructors" Enabled="True" />
+    <Rule Name="IndexersShouldNotBeMultidimensional" Enabled="True" />
+    <Rule Name="InterfaceMethodsShouldBeCallableByChildTypes" Enabled="True" />
+    <Rule Name="ListsAreStronglyTyped" Enabled="True" />
+    <Rule Name="MarkAssembliesWithAssemblyVersion" Enabled="True" />
+    <Rule Name="MarkAssembliesWithClsCompliant" Enabled="True" />
+    <Rule Name="MarkAssembliesWithComVisible" Enabled="True" />
+    <Rule Name="MarkAttributesWithAttributeUsage" Enabled="True" />
+    <Rule Name="MarkEnumsWithFlags" Enabled="True" />
+    <Rule Name="MembersShouldNotExposeCertainConcreteTypes" Enabled="True" />
+    <Rule Name="MovePInvokesToNativeMethodsClass" Enabled="True" />
+    <Rule Name="NestedTypesShouldNotBeVisible" Enabled="True" />
+    <Rule Name="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Enabled="True" />
+    <Rule Name="OverrideMethodsOnComparableTypes" Enabled="True" />
+    <Rule Name="PropertiesShouldNotBeWriteOnly" Enabled="True" />
+    <Rule Name="ProvideObsoleteAttributeMessage" Enabled="True" />
+    <Rule Name="ReplaceRepetitiveArgumentsWithParamsArray" Enabled="True" />
+    <Rule Name="StaticHolderTypesShouldBeSealed" Enabled="True" />
+    <Rule Name="StaticHolderTypesShouldNotHaveConstructors" Enabled="True" />
+    <Rule Name="StringUriOverloadsCallSystemUriOverloads" Enabled="True" />
+    <Rule Name="TypesShouldNotExtendCertainBaseTypes" Enabled="True" />
+    <Rule Name="TypesThatOwnDisposableFieldsShouldBeDisposable" Enabled="True" />
+    <Rule Name="TypesThatOwnNativeResourcesShouldBeDisposable" Enabled="True" />
+    <Rule Name="UriParametersShouldNotBeStrings" Enabled="True" />
+    <Rule Name="UriPropertiesShouldNotBeStrings" Enabled="True" />
+    <Rule Name="UriReturnValuesShouldNotBeStrings" Enabled="True" />
+    <Rule Name="UseEventsWhereAppropriate" Enabled="True" />
+    <Rule Name="UseGenericEventHandlerInstances" Enabled="True" />
+    <Rule Name="UseGenericsWhereAppropriate" Enabled="True" />
+    <Rule Name="UseIntegralOrStringArgumentForIndexers" Enabled="True" />
+    <Rule Name="UsePropertiesWhereAppropriate" Enabled="True" />
+   </RuleFile>
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="False">
+    <Rule Name="DoNotNameEnumValuesReserved" Enabled="True" />
+    <Rule Name="DoNotPrefixEnumValuesWithTypeName" Enabled="True" />
+    <Rule Name="EventsShouldNotHaveBeforeOrAfterPrefix" Enabled="True" />
+    <Rule Name="FlagsEnumsShouldHavePluralNames" Enabled="True" />
+    <Rule Name="IdentifiersShouldDifferByMoreThanCase" Enabled="True" />
+    <Rule Name="IdentifiersShouldHaveCorrectPrefix" Enabled="True" />
+    <Rule Name="IdentifiersShouldHaveCorrectSuffix" Enabled="True" />
+    <Rule Name="IdentifiersShouldNotContainTypeNames" Enabled="True" />
+    <Rule Name="IdentifiersShouldNotHaveIncorrectPrefix" Enabled="True" />
+    <Rule Name="IdentifiersShouldNotHaveIncorrectSuffix" Enabled="True" />
+    <Rule Name="IdentifiersShouldNotMatchKeywords" Enabled="True" />
+    <Rule Name="OnlyFlagsEnumsShouldHavePluralNames" Enabled="True" />
+    <Rule Name="ParameterNamesShouldMatchBaseDeclaration" Enabled="True" />
+    <Rule Name="ParameterNamesShouldNotMatchMemberNames" Enabled="True" />
+    <Rule Name="PropertyNamesShouldNotMatchGetMethods" Enabled="True" />
+    <Rule Name="ResourceStringCompoundWordsShouldBeCasedCorrectly" Enabled="True" />
+    <Rule Name="ResourceStringsShouldBeSpelledCorrectly" Enabled="True" />
+    <Rule Name="TypeNamesShouldNotMatchNamespaces" Enabled="True" />
+    <Rule Name="UsePreferredTerms" Enabled="True" />
+   </RuleFile>
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.36" />
+</FxCopProject>

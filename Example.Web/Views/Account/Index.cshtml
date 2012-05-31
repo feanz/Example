@@ -1,0 +1,32 @@
+﻿@model  IEnumerable<Example.Core.Model.User>
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>
+    Users</h2>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@{
+    var grid = new WebGrid(source: Model,
+        rowsPerPage: 10, canPage: true, canSort: true);
+    grid.Pager(WebGridPagerModes.NextPrevious);    
+}
+<div>
+    @grid.GetHtml(
+        tableStyle: "usertable",
+        columns: grid.Columns(
+            grid.Column(format: (item) =>
+                 Html.ActionLink("Edit", "Edit", new { controller = "Account", item.Id })),
+            grid.Column("LastName", "Last Name"),
+            grid.Column("FirstName", "First Name"),
+            grid.Column("Email"),
+            grid.Column("Created On", "CreatedOn", format: (item) => @String.Format("{0:g}", item.CreatedOn)),
+            grid.Column("Last Login", "LastLogin", format: (item) => @String.Format("{0:g}", item.LastLogin)),
+            grid.Column("RoleList", "Roles"),
+            grid.Column(format: (item) =>
+                 Html.ActionLink("Delete", "Delete", new { controller = "Account", item.Id }))
+        )
+    )
+</div>

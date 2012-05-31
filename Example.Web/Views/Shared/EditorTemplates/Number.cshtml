@@ -1,0 +1,9 @@
+@using Telerik.Web.Mvc.UI
+@model double
+
+@(Html.Telerik().NumericTextBox()
+        .Name(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty))
+        .InputHtmlAttributes(new { style = "width:100%" })
+        .Value(Model)
+)
+

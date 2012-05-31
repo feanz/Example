@@ -1,0 +1,19 @@
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
+  <class xmlns="urn:nhibernate-mapping-2.2" name="Example.Core.Model.Role, Example.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" table="`Role`">
+    <id name="Id" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="Id" />
+      <generator class="identity" />
+    </id>
+    <bag cascade="all" inverse="true" name="Users" table="UserRoles">
+      <key>
+        <column name="Role_id" />
+      </key>
+      <many-to-many class="Example.Core.Model.User, Example.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <column name="User_id" />
+      </many-to-many>
+    </bag>
+    <property name="RoleName" type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="RoleName" />
+    </property>
+  </class>
+</hibernate-mapping>
